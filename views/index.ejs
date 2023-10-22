@@ -1,0 +1,75 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/event.css">
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-X/YkDZyjTf4wyc2Vy16YGCPHwAY8rZJY+POgokZjQB2mhIRFJCckEGc6YyX9eNsPfn0PzThEuNs+uaomE5CO6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <%- include('./includes/navigation.ejs') %>
+    <div class="container" style="color:darkgreen">
+        <h1>Event List</h1>
+    </div>
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <% if (message){ %>
+                    <div class="alert alert-dismissible fade show alert-<%= message.type %>" role="alert">
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" area-label="Close"></button>
+                        <strong><%= message.message %></strong>
+                    </div>
+                <% } %>
+                <div class="table-responsive">
+                    <% if (events.length > 0){ %>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="table-success">
+                                    <th>ID</th>
+                                    <th>Event Name</th>
+                                    <th>Event Logo</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Client Name</th>
+                                    <th>Client Logo</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% events.forEach((row, index) => { 
+                                    let date1 = new Date(row.start_date);
+                                    let date2 = new Date(row.end_date);
+                                    const options = {
+                                    weekday: 'short',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                    };
+                                    let start_date = date1.toLocaleDateString('en-US', options)
+                                    let end_date = date2.toLocaleDateString('en-US', options)%>
+                                    <tr>
+                                        <td><%= index %></td>
+                                        <td><%= row.event_name %></td>
+                                        <td><img src="<%= row.event_logo %>" width="50" class="img-thumbnail"></td>
+                                        <td><%= start_date %></td>
+                                        <td><%= end_date %></td>
+                                        <td><%= row.company_name %></td>
+                                        <td><img src="<%= row.client_logo %>" width="50" class="img-thumbnail"></td>
+                                        <td><%= row.email %></td>
+                                        <td><%= row.phone %></td>
+                                        <td>
+                                            <a href="/edit-event/<%= row._id %>" class="text-success"><i class="fas fa-edit fa-lg mx-1"></i></a>
+                                            <a href="/delete-event/<%= row._id %>" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    <% } else{ %>
+                        <h1 class="text-center text-secondary mt-5">No Events Found!</h1>
+                    <% } %>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+<%- include('./includes/end.ejs') %>
